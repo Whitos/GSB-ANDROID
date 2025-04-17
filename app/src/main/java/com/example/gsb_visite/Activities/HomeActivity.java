@@ -31,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     private String token;
     private PraticienAdapter adapter;
     private List<Praticien> praticienList = new ArrayList<>();
+    private boolean affichagePortefeuille = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,12 @@ public class HomeActivity extends AppCompatActivity {
         binding.rvPraticiens.setLayoutManager(new LinearLayoutManager(this));
         adapter = new PraticienAdapter(praticienList);
         binding.rvPraticiens.setAdapter(adapter);
+
+        binding.btnTogglePortefeuille.setOnClickListener(v -> {
+            affichagePortefeuille = !affichagePortefeuille;
+            updateButtonText();
+            reloadPraticiens();
+        });
 
         binding.rvPraticiens.addOnItemTouchListener(new RecyclerTouchListener(this,binding.rvPraticiens, new RecyclerViewClickListener() {
                     @Override
@@ -65,7 +72,23 @@ public class HomeActivity extends AppCompatActivity {
                 }
         ));
         loadUserInfo();
-        loadPraticiensPortefeuille();
+        reloadPraticiens();
+    }
+
+    private void updateButtonText() {
+        if (affichagePortefeuille) {
+            binding.btnTogglePortefeuille.setText("Voir tous les praticiens");
+        } else {
+            binding.btnTogglePortefeuille.setText("Voir mon portefeuille");
+        }
+    }
+
+    private void reloadPraticiens() {
+        if (affichagePortefeuille) {
+            loadPraticiensPortefeuille();
+        } else {
+            loadPraticiens();
+        }
     }
 
     private void loadUserInfo() {
@@ -89,6 +112,26 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void loadPraticiens() {
+        VisiteurApiService apiService = RetrofitClientInstance.getRetrofitInstance().create(VisiteurApiService.class);
+        Call<ArrayList<Praticien>> call = apiService.getPraticiens(token);
+        call.enqueue(new Callback<ArrayList<Praticien>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Praticien>> call, Response<ArrayList<Praticien>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    praticienList.clear();
+                    praticienList.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Praticien>> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Erreur: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void loadPraticiensPortefeuille() {
