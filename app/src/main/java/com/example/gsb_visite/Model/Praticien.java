@@ -3,10 +3,12 @@ package com.example.gsb_visite.Model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
-public class Visiteur implements Serializable {
+public class Praticien implements Serializable {
+
+    @SerializedName("_id")
+    private String id;
 
     @SerializedName("nom")
     private String nom;
@@ -20,19 +22,23 @@ public class Visiteur implements Serializable {
     @SerializedName("email")
     private String email;
 
-    @SerializedName("date_embauche")
-    private Date dateEmbauche;
+    @SerializedName("rue")
+    private String rue;
+
+    @SerializedName("code_postal")
+    private String codePostal;
+
+    @SerializedName("ville")
+    private String ville;
 
     @SerializedName("visites")
     private List<String> visites;
 
-    @SerializedName("userId")
-    private String userId;
+    // Nouveau getter pour l'ID
+    public String getId() {
+        return id;
+    }
 
-    @SerializedName("token")
-    private String token;
-
-    // Getters
     public String getNom() {
         return nom;
     }
@@ -49,20 +55,19 @@ public class Visiteur implements Serializable {
         return email;
     }
 
-    public Date getDateEmbauche() {
-        return dateEmbauche;
+    public String getRue() {
+        return rue;
+    }
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public String getVille() {
+        return ville;
     }
 
     public List<String> getVisites() {
         return visites;
     }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
 }

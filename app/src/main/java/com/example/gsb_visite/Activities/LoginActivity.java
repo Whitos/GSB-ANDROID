@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // Configuration du bouton de connexion
-        binding.btnSignIn.setOnClickListener(v -> {
+        binding.btnConnexion.setOnClickListener(v -> {
             String email = binding.etEmail.getText().toString().trim();
             String password = binding.etPassword.getText().toString().trim();
 
@@ -68,15 +68,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Visiteur> call, Response<Visiteur> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    //Map<String, String> data = response.body();
-                    response.body();
 
-                    // Passer directement à HomeActivity avec les données
-//                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-//                    intent.putExtra("userId", userId);
-//                    intent.putExtra("token", token);
-//                    startActivity(intent);
-//                    finish();
+                    Visiteur visiteur = response.body();
+
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    intent.putExtra("userId", visiteur.getUserId());
+                    intent.putExtra("token", visiteur.getToken());
+                    startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "Échec de connexion", Toast.LENGTH_LONG).show();
                 }
