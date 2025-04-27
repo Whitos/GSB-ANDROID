@@ -1,101 +1,134 @@
 
-# GSB Visites - Application Android
+# GSB Visites - Projet Mobile & API
 
-Application mobile Android développée pour le laboratoire Galaxy Swiss Bourdin (GSB) dans le cadre du BTS SIO SLAM.
+Projet complet de gestion de visites médicales pour le laboratoire Galaxy Swiss Bourdin, comprenant :
+- Une **application Android** pour les visiteurs médicaux.
+- Une **API REST** réalisée en **Node.js/ExpressJS** pour la communication serveur.
 
-## 📋 Présentation du projet
+---
 
-L'application **GSB Visites** permet aux visiteurs médicaux de :
-- Se connecter de manière sécurisée.
-- Consulter la liste de leurs praticiens associés.
-- Visualiser et consulter les comptes rendus de visites.
-- Créer et mettre à jour des visites.
-- Ajouter de nouveaux praticiens.
+## 📱 Partie 1 : Application Android (GSB-ANDROID)
 
-Cette application s'inscrit dans la démarche de digitalisation de l'activité commerciale du laboratoire et vise à centraliser les comptes-rendus de visite pour un meilleur suivi de la communication auprès des praticiens.
+### Fonctionnalités principales
 
-## 🛠️ Fonctionnalités principales
+- Authentification utilisateur (connexion sécurisée)
+- Consultation de la liste des praticiens associés
+- Consultation des visites d'un praticien
+- Ajout d'un nouveau praticien
+- Création et mise à jour de visites
+- Appels aux API REST avec traitement des réponses JSON
 
-- Authentification (email + mot de passe)
-- Liste des praticiens associés
-- Détail des informations d'un praticien
-- Liste des visites par praticien
-- Détail et mise à jour d'une visite
-- Création d'un praticien
-- Création d'une nouvelle visite
-- Fonctionnement hors-ligne avec synchronisation différée (prévu)
+### Technologies utilisées
 
-## 🧱 Architecture technique
+- **Android Studio**
+- **Java**
+- **Appels API REST (HTTPClient/Volley/Retrofit)**
+- Gestion de la persistance temporaire des données en local
 
-- **Android Studio** pour le développement mobile
-- **Java** pour le code source
-- **MongoDB** pour le stockage des données (modèle document)
-- Respect des conventions de la **programmation orientée objet**
+---
 
-## 🗂️ Schéma de la base de données MongoDB
+## 🌐 Partie 2 : API Backend (API-GSB-Visite)
+
+### Fonctionnalités principales
+
+- Authentification des visiteurs
+- Récupération des praticiens associés à un visiteur
+- Récupération, création et modification des visites
+- Création de nouveaux praticiens
+- API sécurisée avec contrôle des accès
+
+### Technologies utilisées
+
+- **Node.js** + **ExpressJS** (serveur backend)
+- **MongoDB** (base de données NoSQL)
+- **Mongoose** (ORM pour MongoDB)
+- **Postman** (tests d'API)
+
+### Routes principales
+
+| Méthode | URL | Description |
+|:---|:---|:---|
+| POST | `/api/auth/login` | Authentification utilisateur |
+| GET | `/api/praticiens` | Liste des praticiens associés |
+| GET | `/api/visites` | Liste des visites par praticien |
+| POST | `/api/praticiens` | Création d'un nouveau praticien |
+| POST | `/api/visites` | Création d'une nouvelle visite |
+| PUT | `/api/visites/:id` | Mise à jour d'une visite existante |
+
+---
+
+## 🗂️ Architecture générale
 
 ```
-Motif
-- _id
-- libelle: String
+/GSB-ANDROID
+├── Activities
+├── Models
+├── Services (appels API)
+├── Adapters
+├── Layouts (XML)
 
-Visiteur
-- _id
-- nom: String
-- prenom: String
-- tel: String
-- email: String
-- date_embauche: Date
-- visites: [Visite]
++ 
 
-Visite
-- _id
-- date_visite: Date
-- commentaire: String
-- visiteur: Visiteur
-- praticien: Praticien
-- motif: Motif
-
-Praticien
-- _id
-- nom: String
-- prenom: String
-- tel: String
-- email: String
-- rue: String
-- code_postal: String
-- ville: String
-- visites: [Visite]
+/API-GSB-Visite
+├── app.js (serveur Express)
+├── routes/
+│   ├── auth.js
+│   ├── praticiens.js
+│   ├── visites.js
+├── models/
+│   ├── Praticien.js
+│   ├── Visite.js
+│   ├── User.js
+├── controllers/
+├── config/
 ```
 
-## 📱 Maquettes de l'application
-
-- Connexion utilisateur
-- Liste des praticiens
-- Informations du praticien et ses visites
-- Détail de la visite
-- Création d'une nouvelle visite
-
-
-## 📄 Cahier des charges résumé
-
-- Application simple et ergonomique destinée aux visiteurs médicaux.
-- Fonctionnement en mode hors-ligne possible (synchronisation prévue).
-- Centralisation des comptes-rendus de visites.
-- Mise à disposition d'informations sur les praticiens et les produits.
-- Développement natif Android obligatoire.
-- Respect de la programmation orientée objet.
+---
 
 ## 🚀 Déploiement rapide
 
-1. Cloner le projet Android Studio :
+### Lancer l'API (backend)
+
+1. Cloner le projet backend :
 ```bash
-git clone https://github.com/Whitos/GSBVisites.git
+git clone https://github.com/Whitos/API-GSB-Visite.git
 ```
-2. Ouvrir le projet avec Android Studio.
-3. Configurer l'accès à la base MongoDB (si connexion distante prévue).
-4. Lancer l'application sur un émulateur ou un appareil Android réel.
+2. Installer les dépendances :
+```bash
+npm install
+```
+3. Lancer le serveur :
+```bash
+npm start
+```
+4. L'API tourne sur `http://localhost:3000/`
+
+### Lancer l'application Android
+
+1. Cloner le projet Android :
+```bash
+git clone https://github.com/Whitos/GSB-ANDROID.git
+```
+2. Ouvrir avec Android Studio.
+3. Modifier l'URL du serveur backend si nécessaire dans les fichiers de configuration réseau.
+4. Lancer l'application sur un émulateur ou un appareil physique.
+
+---
+
+## 📄 Cahier des charges résumé
+
+- Application Android native pour visiteurs médicaux.
+- Gestion complète des praticiens et visites.
+- Communication en REST API.
+- Fonctionnement sécurisé et structuré.
+- Base de données MongoDB.
+- Tests API réalisés avec Postman.
+
+---
 
 ## 🔗 Liens utiles
+
+- [Repo Android App](https://github.com/Whitos/GSB-ANDROID)
+- [Repo API Backend](https://github.com/Whitos/API-GSB-Visite)
 
 ---
